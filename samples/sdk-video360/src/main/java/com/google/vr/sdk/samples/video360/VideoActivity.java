@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +55,7 @@ public class VideoActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    initDefaultSample();
     setContentView(R.layout.video_activity);
 
     // Configure the MonoscopicView which will render the video and UI.
@@ -113,6 +115,13 @@ public class VideoActivity extends Activity {
     } else {
       // Permission has already been granted.
       initializeActivity();
+    }
+  }
+
+  private void initDefaultSample() {
+    if(getIntent().getData() == null){
+      getIntent().setData(Uri.parse("https://www.dropbox.com/s/cfzfgvh7zhizfs4/360_sample.mp4?dl=1"));
+      getIntent().putExtra("stereoFormat", 0);
     }
   }
 

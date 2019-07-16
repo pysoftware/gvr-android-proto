@@ -16,6 +16,7 @@
 
 package com.google.vr.sdk.samples.video360;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -178,11 +179,6 @@ public class MediaLoader {
       // Based on the Intent's data, load the appropriate media from disk.
       Uri uri = intent[0].getData();
       try {
-        File file = new File(uri.getPath());
-        if (!file.exists()) {
-          throw new FileNotFoundException();
-        }
-
         String type = URLConnection.guessContentTypeFromName(uri.getPath());
         if (type == null) {
           throw new InvalidParameterException("Unknown file type: " + uri);
@@ -190,7 +186,14 @@ public class MediaLoader {
           // Decoding a large image can take 100+ ms.
           mediaImage = BitmapFactory.decodeFile(uri.getPath());
         } else if (type.startsWith("video")) {
-          MediaPlayer mp = MediaPlayer.create(context, uri);
+          MediaPlayer mp;
+          if(uri.getScheme().equals("http") || uri.getScheme().equals("https")) {
+            mp = new MediaPlayer();
+            mp.setDataSource(context, uri, null);
+            mp.prepare();
+          } else {
+            mp = MediaPlayer.create(context, uri);
+          }
           synchronized (MediaLoader.this) {
             // This needs to be synchronized with the methods that could clear mediaPlayer.
             mediaPlayer = mp;
@@ -200,8 +203,8 @@ public class MediaLoader {
         }
 
       } catch (IOException | InvalidParameterException e) {
-        errorText = String.format("Error loading file [%s]: %s", uri.getPath(), e);
-        Log.e(TAG, errorText);
+        errorText = String.format("Error loading file [%s]: %s", uri.toString(), e);
+        Log.e(TAG, errorText, e);
       }
 
       displayWhenReady();

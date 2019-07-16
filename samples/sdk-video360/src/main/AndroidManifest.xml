@@ -14,6 +14,8 @@
   <uses-feature android:name="android.software.vr.mode" android:required="true"/>
 
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+
 
   <!-- largeheap=true is required for loading 8k x 8k images. -->
   <application android:largeHeap="true">
