@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.vr.sdk.samples.video360"
     android:versionCode="190204066"
-    android:versionName="1.200.0">
+    android:versionName="1.190.0"
+    tools:ignore="GradleOverrides">
 
   <!-- The VR app is Daydream-only since it uses the controller. -->
 
@@ -18,13 +20,15 @@
 
 
   <!-- largeheap=true is required for loading 8k x 8k images. -->
-  <application android:largeHeap="true">
+  <application android:largeHeap="true"
+      tools:ignore="GoogleAppIndexingWarning">
     <!-- This is a 2D Version of the video player. -->
     <activity
         android:name=".VideoActivity"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:launchMode="singleTask"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
         android:screenOrientation="landscape">
       <!-- This Activity only shows up in the 2D launcher.  -->
       <intent-filter>
@@ -42,7 +46,8 @@
         android:launchMode="singleTask"
         android:resizeableActivity="false"
         android:screenOrientation="landscape"
-        android:theme="@style/VrActivityTheme">
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        tools:targetApi="n">
 
       <!-- The VR icon to be used in Daydream Home comes in two parts: a foreground icon and a
            background icon. The foreground icon is also used by the 2D Activity. -->

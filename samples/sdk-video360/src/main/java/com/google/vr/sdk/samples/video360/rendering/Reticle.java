@@ -16,12 +16,14 @@
 
 package com.google.vr.sdk.samples.video360.rendering;
 
-import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
-
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+
 import com.google.vr.sdk.controller.Orientation;
+
 import java.nio.FloatBuffer;
+
+import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
 
 /**
  * Renders a reticle in VR for the Daydream Controller.

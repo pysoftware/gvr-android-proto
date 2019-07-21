@@ -16,16 +16,17 @@
 
 package com.google.vr.sdk.samples.video360.rendering;
 
-import static android.opengl.GLU.gluErrorString;
-
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.text.TextUtils;
 import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import static android.opengl.GLU.gluErrorString;
 
 /** GL utility methods. */
 public class Utils {

@@ -16,8 +16,6 @@
 
 package com.google.vr.sdk.samples.video360.rendering;
 
-import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
-
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -26,9 +24,13 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.view.Surface;
 import android.widget.FrameLayout;
+
 import com.google.vr.sdk.controller.Orientation;
+
 import java.nio.FloatBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
 
 /**
  * Renders a floating, textured, translucent quad in VR at a hardcoded distance.

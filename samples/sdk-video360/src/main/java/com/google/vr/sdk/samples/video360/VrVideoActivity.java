@@ -222,7 +222,7 @@ public class VrVideoActivity extends GvrActivity {
     private static final float Z_FAR = 100;
 
     // Used by ControllerEventListener to manipulate the scene.
-    public final SceneRenderer scene;
+    final SceneRenderer scene;
 
     private final float[] viewProjectionMatrix = new float[16];
 
@@ -233,7 +233,7 @@ public class VrVideoActivity extends GvrActivity {
      *     attached to this View in order to properly handle UI events.
      */
     @MainThread
-    public Renderer(ViewGroup parent) {
+    Renderer(ViewGroup parent) {
       Pair<SceneRenderer, VideoUiView> pair
           = SceneRenderer.createForVR(VrVideoActivity.this, parent);
       scene = pair.first;

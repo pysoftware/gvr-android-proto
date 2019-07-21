@@ -16,11 +16,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 29
 
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 26
+        minSdkVersion 23
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -30,12 +30,17 @@ android {
             minifyEnabled true
             proguardFiles.add(file('../../proguard-gvr.txt'))
         }
-
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     // implementation 'com.google.vr:sdk-base:1.200.0'
     implementation project(':sdk-base-1.200.0')
 }

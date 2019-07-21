@@ -16,8 +16,6 @@
 
 package com.google.vr.sdk.samples.video360.rendering;
 
-import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
-
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
@@ -37,9 +35,13 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.ViewGroup;
+
 import com.google.vr.sdk.controller.Orientation;
 import com.google.vr.sdk.samples.video360.VideoUiView;
+
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
 
 /**
  * Controls and renders the GL Scene.
@@ -86,8 +88,8 @@ public final class SceneRenderer {
    * Constructs the SceneRenderer with the given values.
    */
   /* package */ SceneRenderer(
-      CanvasQuad canvasQuad, VideoUiView videoUiView, Handler uiHandler,
-      SurfaceTexture.OnFrameAvailableListener externalFrameListener) {
+          CanvasQuad canvasQuad, VideoUiView videoUiView, Handler uiHandler,
+          OnFrameAvailableListener externalFrameListener) {
     this.canvasQuad = canvasQuad;
     this.videoUiView = videoUiView;
     this.uiHandler = uiHandler;
@@ -173,7 +175,8 @@ public final class SceneRenderer {
    * @return a Surface that can be passed to {@link android.media.MediaPlayer#setSurface(Surface)}
    */
   @AnyThread
-  public synchronized @Nullable Surface createDisplay(int width, int height, Mesh mesh) {
+  public synchronized @Nullable
+  Surface createDisplay(int width, int height, Mesh mesh) {
     if (displayTexture == null) {
       Log.e(TAG, ".createDisplay called before GL Initialization completed.");
       return null;
