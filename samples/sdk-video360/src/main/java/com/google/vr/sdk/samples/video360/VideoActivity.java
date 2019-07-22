@@ -22,24 +22,21 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.google.vr.ndk.base.DaydreamApi;
-import com.google.vr.sdk.controller.Controller;
-import com.google.vr.sdk.controller.ControllerManager;
 import com.google.vr.sdk.samples.video360.rendering.Mesh;
-import com.google.vr.sdk.samples.video360.rendering.SceneRenderer;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Basic Activity to hold {@link MonoscopicView} and render a 360 video in 2D.
@@ -51,7 +48,10 @@ import com.google.vr.sdk.samples.video360.rendering.SceneRenderer;
  * how to load other media using a custom Intent, see {@link MediaLoader}.
  */
 public class VideoActivity extends Activity {
-    private static final String TAG = "VideoActivity";
+    // Control time to hide controls
+    private Timer mTimer;
+
+    //    private static final String TAG = "VideoActivity";
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_ID = 1;
     private MonoscopicView videoView;
     VideoUiView videoUi;
@@ -72,7 +72,7 @@ public class VideoActivity extends Activity {
         // Displays the controls for video playback.
         videoUi = findViewById(R.id.video_ui_view);
         // W8 for hiding elements
-        hundle();
+        hideControls();
         videoUi.setVrIconClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,8 +123,7 @@ public class VideoActivity extends Activity {
             // The user can click the button to request permission but we will also click on their behalf
             // when the Activity is created.
             button.callOnClick();
-        }
-        else {
+        } else {
             // Permission has already been granted.
             initializeActivity();
         }
@@ -141,7 +140,8 @@ public class VideoActivity extends Activity {
      * Handles the user accepting the permission.
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] results) {
         if (requestCode == READ_EXTERNAL_STORAGE_PERMISSION_ID) {
             if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
                 initializeActivity();
@@ -195,27 +195,34 @@ public class VideoActivity extends Activity {
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN_LEFT) {
+            showControls();
+            hideControls();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // Here you can use DPAD_CENTER to control play/ pause button
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                videoUi.setAlpha(1);
-                hundle();
+                showControls();
+                hideControls();
                 return true;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 videoView.dpadTracker.DPAD_DOWN();
-                hundle();
                 return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 videoView.dpadTracker.DPAD_LEFT();
-                hundle();
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 videoView.dpadTracker.DPAD_RIGHT();
-                hundle();
                 return true;
             case KeyEvent.KEYCODE_DPAD_UP:
                 videoView.dpadTracker.DPAD_UP();
-                hundle();
                 return true;
         }
         return false;
@@ -224,19 +231,32 @@ public class VideoActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        videoUi.setAlpha(1);
-        hundle();
+        showControls();
     }
 
-    private void hundle() {
-        new Handler().postDelayed(new Runnable() {
+    private void hideControls() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        mTimer = new Timer();
+        MyTimerTask mMyTimerTask = new MyTimerTask();
+        mTimer.schedule(mMyTimerTask, 5000);
+    }
 
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                videoUi.setAlpha(0);
-                Log.d("Hundle", "Hundle");
-            }
-        }, 5000);
+    private void showControls() {
+        videoUi.setAlpha(1);
+        hideControls();
+    }
+
+    class MyTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    videoUi.setAlpha(0);
+                }
+            });
+        }
     }
 }

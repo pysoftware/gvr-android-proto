@@ -194,8 +194,11 @@ public class VideoUiView extends LinearLayout {
             seekBar.setOnSeekBarChangeListener(new SeekBarListener());
         } else {
             playPauseToggle.setVisibility(GONE);
+            playPauseToggle.setEnabled(false);
             seekBar.setVisibility(GONE);
+            seekBar.setEnabled(false);
             statusText.setVisibility(GONE);
+            seekBar.setEnabled(false);
         }
     }
 
